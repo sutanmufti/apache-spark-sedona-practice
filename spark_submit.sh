@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# simple job
 docker exec -it \
   sedona-master \
   /opt/spark/bin/spark-submit \
@@ -10,6 +11,8 @@ docker exec -it \
     /jobs/job.py
 
 
+
+# Read and write to gcs
 docker exec -it \
   -e GOOGLE_APPLICATION_CREDENTIALS=/shared/keys/key.json \
   sedona-master \
