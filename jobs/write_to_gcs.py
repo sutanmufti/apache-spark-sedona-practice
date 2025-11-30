@@ -1,9 +1,8 @@
 from pyspark.sql import SparkSession
 import os
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/shared/keys/key.json'
-
 def main():
+    print("starting job")
     spark = (
     SparkSession.builder
         .appName("Sedona Example")
@@ -13,11 +12,20 @@ def main():
         .getOrCreate()
     )
 
-    df = spark.read.parquet('file:///shared/riyadh_places.parquet')
+    gcs_bucket = spark.conf.get("spark.app.gcsBucket", None)
+
+    if gcs_bucket == None:
+        print(r"os.getenv('GCS_BUCKET') is None. There is no bucket")
+        spark.stop()
+        return 1
+    else:
+        print("USING GCS", gcs_bucket)
+
+    df = spark.read.parquet(f"gs://{gcs_bucket}/riyadh_places.parquet")
     df.createOrReplaceTempView('riyadh')
     spark.sql("Select ST_AsText(ST_GeomFromWKB(geometry)) as riyadh_geometry from riyadh limit 10").show()
 
-    output_path = "gs://sample-apache-sedona-bucket-x992jnsd/output/riyadh_sample"
+    output_path = f"gs://{gcs_bucket}/output/riyadh_sample"
 
     print("write to gcs")
     sample_df = df.limit(10)

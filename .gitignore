@@ -5,3 +5,4 @@ riyadh_places.parquet
 ignore/
 *.jar
 /shared/keys/*.json
+setenv.sh
