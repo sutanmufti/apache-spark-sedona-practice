@@ -1,0 +1,42 @@
+services:
+  sedona-master:
+    image: apache/sedona
+    container_name: sedona-master
+    environment:
+      - SPARK_MODE=master
+      - PYSPARK_PYTHON=python3
+      - PYSPARK_DRIVER_PYTHON=python3
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+      --host sedona-master --port 7077 --webui-port 8080
+    networks:
+      - sedona-net
+    volumes:
+      - ./shared:/shared
+      - ./jobs:/jobs
+
+  sedona-worker:
+    image: apache/sedona
+    container_name: sedona-worker
+    depends_on:
+      - sedona-master
+    environment:
+      - SPARK_MODE=worker
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker
+      spark://sedona-master:7077
+    ports:
+      - "8081:8081"
+    networks:
+      - sedona-net
+    volumes:
+      - ./shared:/shared
+
+
+networks:
+  sedona-net:
+    driver: bridge
+
