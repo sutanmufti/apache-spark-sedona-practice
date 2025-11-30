@@ -4,3 +4,4 @@ riyadh_places.parquet
 .venv/
 ignore/
 *.jar
+/shared/keys/*.json
