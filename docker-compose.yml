@@ -35,6 +35,40 @@ services:
     volumes:
       - ./shared:/shared
 
+  sedona-worker2:
+    image: apache/sedona
+    container_name: sedona-worker2
+    depends_on:
+      - sedona-master
+    environment:
+      - SPARK_MODE=worker
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker
+      spark://sedona-master:7077
+    ports:
+      - "8082:8081"
+    networks:
+      - sedona-net
+    volumes:
+      - ./shared:/shared
+
+  sedona-worker3:
+    image: apache/sedona
+    container_name: sedona-worker3
+    depends_on:
+      - sedona-master
+    environment:
+      - SPARK_MODE=worker
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker
+      spark://sedona-master:7077
+    ports:
+      - "8083:8081"
+    networks:
+      - sedona-net
+    volumes:
+      - ./shared:/shared
+
 
 networks:
   sedona-net:

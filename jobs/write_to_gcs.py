@@ -25,7 +25,7 @@ def main():
     df.createOrReplaceTempView('riyadh')
     spark.sql("Select ST_AsText(ST_GeomFromWKB(geometry)) as riyadh_geometry from riyadh limit 10").show()
 
-    output_path = f"gs://{gcs_bucket}/output/riyadh_sample"
+    output_path = f"gs://{gcs_bucket}/output/riyadh_sample2"
 
     print("write to gcs")
     sample_df = df.limit(10)
