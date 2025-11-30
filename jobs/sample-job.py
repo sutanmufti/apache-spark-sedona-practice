@@ -6,7 +6,7 @@
 This script demonstrates a simple Apache Spark job using Apache Sedona to
 process geospatial data stored in Parquet format.
 
-The job initialises a Spark session configured with Sedona’s SQL extension
+The job initialises a Spark session configured with Sedona's SQL extension
 and Kryo serialisation, reads a local Parquet file containing geospatial
 records for the Riyadh region, and registers the data as a temporary SQL
 view. It then executes a small selection of Sedona SQL functions, including
