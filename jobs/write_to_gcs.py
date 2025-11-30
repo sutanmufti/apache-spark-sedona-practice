@@ -40,7 +40,7 @@ def main():
     SparkSession.builder
         .appName("Sedona Example")
         .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-        .config("spark.kryo.registrator", 
+        .config("spark.kryo.registrator",
             "org.apache.sedona.viz.core.Serde.SedonaVizKryoRegistrator")
         .config("spark.sql.extensions", "org.apache.sedona.sql.SedonaSqlExtensions")
         .getOrCreate()
@@ -57,7 +57,10 @@ def main():
 
     df = spark.read.parquet(f"gs://{gcs_bucket}/riyadh_places.parquet")
     df.createOrReplaceTempView('riyadh')
-    spark.sql("Select ST_AsText(ST_GeomFromWKB(geometry)) as riyadh_geometry from riyadh limit 10").show()
+    spark.sql("""
+        Select ST_AsText(ST_GeomFromWKB(geometry)) as riyadh_geometry 
+        from riyadh limit 10
+    """).show()
 
     output_path = f"gs://{gcs_bucket}/output/riyadh_sample2"
 
