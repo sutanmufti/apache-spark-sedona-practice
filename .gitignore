@@ -6,3 +6,6 @@ ignore/
 *.jar
 /shared/keys/*.json
 setenv.sh
+
+
+**/*.tfvars
