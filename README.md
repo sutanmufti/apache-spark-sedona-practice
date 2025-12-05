@@ -17,6 +17,25 @@ Example of submitting the spark job:
 
 [spark_submit.sh](./spark_submit.sh)
 
+# Google Cloud Dataproc: Manages Spark Service
+
+I've put a `./terraform/*.tf` files to deploy a Dataproc cluster. Submit a job by doing the following:
+
+```bash
+
+export GS_BUCKET=my-unique-bucket-name
+export PYSPARK_JOB_FILE='jobs.py' # assuming there is a jobs.py file
+
+gcloud storage cp ./$PYSPARK_JOB_FILE gs://$GS_BUCKET/jobs/$PYSPARK_JOB_FILE
+
+
+export CLUSTER_NAME=my-dataproc-cluster
+export CLUSTER_REGION=asia-southeast2 # just an example
+
+gcloud dataproc jobs submit pyspark gs://$GS_BUCKET/jobs/$PYSPARK_JOB_FILE --cluster=$CLUSTER_NAME  --region=$CLUSTER_REGION
+
+```
+
 
 # Setup
 
